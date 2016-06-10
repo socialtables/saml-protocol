@@ -1,6 +1,9 @@
 {
   "name": "@socialtables/saml-protocol",
   "version": "0.1.0",
+  "engines" : {
+    "node" : ">=4.0.0"
+  },
   "description": "A SAML protocol implementation for SPs and IDPs without opinionated framework bindings",
   "main": "lib/index.js",
   "keywords": [
