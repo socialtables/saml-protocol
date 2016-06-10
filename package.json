@@ -8,7 +8,7 @@
     "auth"
   ],
   "scripts": {
-    "test": "test"
+    "test": "mocha test/"
   },
   "author": "Robert Brownstein",
   "license": "ISC",
