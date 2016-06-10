@@ -1,5 +1,5 @@
 {
-  "name": "saml-protocol",
+  "name": "@socialtables/saml-protocol",
   "version": "0.1.0",
   "description": "A SAML protocol implementation for SPs and IDPs without opinionated framework bindings",
   "main": "lib/index.js",
@@ -11,7 +11,7 @@
     "test": "mocha test/"
   },
   "author": "Robert Brownstein",
-  "license": "ISC",
+  "license": "Apache 2",
   "dependencies": {
     "node-forge": "^0.6.39",
     "xml-crypto": "^0.8.4",
