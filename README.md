@@ -1,5 +1,6 @@
 # SAML-Protocol
 [![CircleCI](https://circleci.com/gh/socialtables/saml-protocol.svg?style=svg&circle-token=505111c7c23aa347b341f48992c91bff9199a5cc)](https://circleci.com/gh/socialtables/saml-protocol)
+
 A SAML protocol implementation. Supports the following features:
 
 - creation of authentication requests, assertions, and failure responses
