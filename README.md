@@ -1,6 +1,5 @@
 # SAML-Protocol
-A SAML protocol implementation for both service and identity providers.
-Supports the following features:
+A SAML protocol implementation. Supports the following features:
 
 - creation of authentication requests, assertions, and failure responses
 - request and response signing and verification
@@ -8,6 +7,7 @@ Supports the following features:
 - response validation
 - metadata generation and ingestion for both parties
 - POST and REDIRECT protocol bindings
+- both service and identity provider constructs, so you can test your implementation!
 
 ## Compatibility
 Node 4+; Makes use of numerous ES6 features.
