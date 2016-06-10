@@ -1,0 +1,97 @@
+"use strict";
+
+const credentialFixtures = require("./credentials");
+
+module.exports = {
+
+	// IDPs
+	simpleIDP: {
+		entityID: "idp.test.com",
+		credentials: [],
+		endpoints: {
+			login: {
+				post: "idp.test.com/saml/login",
+				redirect: "idp.test.com/saml/login"
+			}
+		},
+		signAllResponses: false,
+		requireSignedRequests: false
+	},
+	simpleIDPWithCredentials: {
+		entityID: "idp.test.com",
+		credentials: [
+			credentialFixtures.idp1
+		],
+		endpoints: {
+			login: "idp.test.com/saml/login",
+			logout: {
+				post: "idp.test.com/saml/logout"
+			}
+		},
+		signAllResponses: true,
+		requireSignedRequests: false
+	},
+
+	// SPs
+	simpleSP: {
+		entityID: "sp.test.com",
+		credentials: [],
+		endpoints: {
+			assert: "sp.test.com/assert"
+		},
+		signAllRequests: false,
+		requireSignedResponses: false
+	},
+	simpleSPWithCredentials: {
+		entityID: "sp.test.com",
+		credentials: [
+			credentialFixtures.sp1,
+			credentialFixtures.sp2
+		],
+		endpoints: {
+			assert: "sp.test.com/assert"
+		},
+		signAllRequests: true,
+		requireSignedResponses: true
+	},
+	oneloginSP: {
+		entityID: "http://sp.example.com/demo1/metadata.php",
+		credentials: [
+			credentialFixtures.sp1
+		],
+		endpoints: {
+			assert: "http://sp.example.com/demo1/index.php?acs"
+		}
+	},
+	oneloginRedirectSP: {
+		entityID: "http://sp.example.com/demo1/metadata.php",
+		credentials: [
+			credentialFixtures.sp1
+		],
+		endpoints: {
+			assert: {
+				redirect: "http://sp.example.com/demo1/index.php?acs"
+			}
+		}
+	},
+	oneloginIDP: {
+		entityID: "http://idp.example.com/metadata.php",
+		credentials: [
+			credentialFixtures.idp1
+		],
+		endpoints: {
+			login: "http://idp.example.com/demo1/index.php?acs"
+		}
+	},
+	oneloginRedirectIDP: {
+		entityID: "http://idp.example.com/metadata.php",
+		credentials: [
+			credentialFixtures.idp1
+		],
+		endpoints: {
+			login: {
+				redirect: "http://idp.example.com/demo1/index.php?acs"
+			}
+		}
+	}
+};

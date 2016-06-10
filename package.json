@@ -1,0 +1,30 @@
+{
+  "name": "saml-protocol",
+  "version": "0.1.0",
+  "description": "A SAML protocol implementation for SPs and IDPs without opinionated framework bindings",
+  "main": "lib/index.js",
+  "keywords": [
+    "saml",
+    "auth"
+  ],
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Robert Brownstein",
+  "license": "ISC",
+  "dependencies": {
+    "node-forge": "^0.6.39",
+    "xml-crypto": "^0.8.4",
+    "xml-encryption": "^0.7.4",
+    "xmlbuilder": "8.2.2",
+    "xmldom": "^0.1.21",
+    "xpath": "^0.0.23",
+    "xpath.js": "^1.0.6"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "mocha": "^2.2.5",
+    "should": "^6.0.3"
+  }
+}
