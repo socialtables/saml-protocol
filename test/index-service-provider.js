@@ -740,6 +740,7 @@ describe("ServiceProvider", function() {
 				.then(idpRequestDescriptor => {
 					idpRequestDescriptor.sp.should.equal(idpModel.spStub);
 					idpRequestDescriptor.requestID.should.not.be.null;
+					idpRequestDescriptor.nameID.format.should.equal("urn:oasis:names:tc:SAML:2.0:nameid-format:persistent");
 					return idp.produceSuccessResponse(
 						idpModel.spStub,
 						idpRequestDescriptor.requestID,

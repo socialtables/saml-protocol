@@ -28,6 +28,9 @@ module.exports = {
 				post: "idp.test.com/saml/logout"
 			}
 		},
+		nameIDFormats: [
+			"urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+		],
 		signAllResponses: true,
 		requireSignedRequests: false
 	},
