@@ -170,7 +170,7 @@ describe("ServiceProvider", function() {
 
 		function encryptAssertion(xml) {
 			const doc = new xmldom.DOMParser().parseFromString(xml);
-			const cred = entityFixtures.oneloginIDP.credentials[0];
+			const cred = entityFixtures.oneloginSP.credentials[0];
 			return encryption
 				.encryptAssertion(doc, cred)
 				.then(doc => {
@@ -443,7 +443,7 @@ describe("ServiceProvider", function() {
 
 		function encryptAssertion(xml) {
 			const doc = new xmldom.DOMParser().parseFromString(xml);
-			const cred = entityFixtures.oneloginIDP.credentials[0];
+			const cred = entityFixtures.oneloginSP.credentials[0];
 			return encryption
 				.encryptAssertion(doc, cred)
 				.then(doc => {
