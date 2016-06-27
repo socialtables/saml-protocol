@@ -14,6 +14,7 @@ describe("ServiceProvider", function() {
 
 	const ServiceProvider = require("../lib").ServiceProvider;
 	const responseConstruction = require("../lib/response-construction");
+	const protocolBindings = require("../lib/protocol-bindings");
 	const errors = require("../lib/errors");
 	const metadata = require("../lib/metadata");
 	const encryption = require("../lib/util/encryption");
@@ -122,10 +123,10 @@ describe("ServiceProvider", function() {
 					const requestXML = zlib.inflateRawSync(new Buffer(requestBase64, "base64")).toString("utf8");
 					const request = new xmldom.DOMParser().parseFromString(requestXML);
 					xpath.select("//*[local-name(.)='AuthnRequest']", request).length.should.equal(1);
+
 					signing.verifyURLSignature(
 						sp.sp.credentials[0].certificate,
-						descriptor.url.query.SAMLRequest,
-						descriptor.url.query.RelayState,
+						protocolBindings.constructSignaturePayload(descriptor.url.query),
 						descriptor.url.query.SigAlg,
 						descriptor.url.query.Signature
 					).should.equal(true);
@@ -464,14 +465,15 @@ describe("ServiceProvider", function() {
 		function signRedirectRequest(queryParams) {
 
 			// compute signature
-			const samlPayload = queryParams.SAMLResponse;
-			const relayState = queryParams.RelayState;
 			const sigAlg = signing.supportedAlgorithms[0];
 			const sigCredential = entityFixtures.oneloginIDP.credentials[0];
-			const signature = signing.createURLSignature(sigCredential.privateKey, samlPayload, relayState, sigAlg);
+
+			queryParams.SigAlg = sigAlg;
+
+			const payload = protocolBindings.constructSignaturePayload(queryParams);
+			const signature = signing.createURLSignature(sigCredential.privateKey, payload, sigAlg);
 
 			// apply query parameters
-			queryParams.SigAlg = sigAlg;
 			queryParams.Signature = signature;
 			return queryParams;
 		}
