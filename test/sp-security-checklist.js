@@ -13,6 +13,7 @@ const samlFixtures   = require("./fixtures/saml");
 const credentials = require("../lib/util/credentials");
 const randomID    = require("../lib/util/random-id");
 const signing     = require("../lib/util/signing");
+const errors      = require("../lib/errors");
 const namespaces  = require("../lib/namespaces");
 const select      = xpath.useNamespaces(namespaces);
 
@@ -126,6 +127,7 @@ describe("Service Provider security checklist", function() {
 					.then(parse)
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors[0].should.have.string("InResponseTo");
 					});
 			});
@@ -139,6 +141,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors[0].should.have.string("destination is invalid");
 					});
 			});
@@ -152,6 +155,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors[0].should.have.string("destination is invalid");
 					});
 			});
@@ -168,6 +172,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors[0].should.have.string("Issuer element does not match IDP's entity ID");
 					});
 			});
@@ -199,6 +204,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors[0].should.have.string("no Assertion in response");
 					});
 			});
@@ -214,6 +220,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors[0].should.have.string("Issuer does not match IDP's entity ID");
 					});
 			});
@@ -232,6 +239,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors[0].should.have.string("no SubjectConfirmation in Assertion");
 					});
 			});
@@ -247,6 +255,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors[0].should.have.string("subject confirmation method must be bearer");
 					});
 			});
@@ -266,6 +275,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors.length.should.equal(3);
 						err.errors.join("").should.have.string("Recipient is required");
 						err.errors.join("").should.have.string("NotOnOrAfter is required");
@@ -283,6 +293,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors.length.should.equal(1);
 						err.errors.join("").should.have.string("Recipient is not valid");
 					});
@@ -298,6 +309,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors.length.should.equal(1);
 						err.errors.join("").should.have.string("NotOnOrAfter is in the past");
 					});
@@ -313,6 +325,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors.length.should.equal(1);
 						err.errors.join("").should.have.string("InResponseTo is not valid");
 					});
@@ -333,6 +346,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors.length.should.equal(1);
 						err.errors.join("").should.have.string("NotBefore is in the future");
 					});
@@ -350,6 +364,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors.length.should.equal(1);
 						err.errors.join("").should.have.string("NotOnOrAfter is in the past");
 					});
@@ -368,6 +383,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors.length.should.equal(1);
 						err.errors.join("").should.have.string("Audience does not match");
 					});
@@ -386,6 +402,7 @@ describe("Service Provider security checklist", function() {
 					})
 					.then(consume).should.eventually.be.rejected
 					.then(err => {
+						err.should.be.an.instanceof(errors.ValidationError);
 						err.errors.length.should.equal(1);
 						err.errors.join("").should.have.string("Assertion must contain at least one AuthnStatement");
 					});
