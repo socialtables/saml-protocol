@@ -55,7 +55,12 @@ module.exports = {
 			assert: "sp.test.com/assert"
 		},
 		signAllRequests: true,
-		requireSignedResponses: true
+		requireSignedResponses: true,
+		extendedRequirements: {
+			InResponseTo: true,
+			NotOnOrAfter: true,
+			Recipient: true
+		}
 	},
 	oneloginSP: {
 		entityID: "http://sp.example.com/demo1/metadata.php",

@@ -263,7 +263,7 @@ describe("Service Provider security checklist", function() {
 
 		describe("Response:Assertion:Subject:SubjectConfirmation:SubjectConfirmationData element", function() {
 
-			it("must contain 'Recipient', 'NotOnOrAfter', and 'InResponseTo' attributes", function() {
+			it("must contain 'Recipient', 'NotOnOrAfter', and 'InResponseTo' attributes when using a high-security configuration", function() {
 				return buildValidResponse()
 					.then(parse)
 					.then(doc => {
