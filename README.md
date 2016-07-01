@@ -1,17 +1,21 @@
 # SAML-Protocol
 [![CircleCI](https://circleci.com/gh/socialtables/saml-protocol.svg?style=svg&circle-token=505111c7c23aa347b341f48992c91bff9199a5cc)](https://circleci.com/gh/socialtables/saml-protocol)
 
-A SAML protocol implementation. Supports the following features:
+A framework-agnostic SAML protocol implementation intended to support both
+ends of SSO handshakes.
 
-- creation of authentication requests, assertions, and failure responses
+## Features:
+
+- request construction and response ingestion for service providers
+- request ingestion and response construction for identity providers
+- metadata creation and ingestion for both IDPs and SPs
 - request and response signing and verification
 - response encryption and decryption
 - response validation
-- metadata generation and ingestion for both parties
-- POST and REDIRECT protocol bindings
-- both service and identity provider constructs, so you can test your implementation!
+- HTTP POST and Redirect protocol bindings
 
 ## Compatibility
+
 Node 4+; Makes use of numerous ES6 features.
 
 ## Usage example - making an AuthnRequest as a service provider
@@ -31,7 +35,6 @@ Node 4+; Makes use of numerous ES6 features.
             assert: "https://your.domain.name.com/your/consumer/endpoint"
         }
     };
-
     const idpConfig = {
         entityID: "https://your.idps.domain.name.com",
         credentials: [
