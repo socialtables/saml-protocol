@@ -143,7 +143,7 @@ describe("ServiceProvider", function() {
 			// spoof a state of having sent the request for this response
 			model = modelStub.whichResolvesIDP(entityFixtures.oneloginIDP);
 			model.storeRequestID("ONELOGIN_4fee3b046395c4e751011e97f8900b5273d56685", entityFixtures.oneloginIDP);
-		})
+		});
 
 		function signResponse(xml) {
 			return signing.signXML(
@@ -428,7 +428,7 @@ describe("ServiceProvider", function() {
 			// spoof a state of having sent the request for this response
 			model = modelStub.whichResolvesIDP(entityFixtures.oneloginIDP);
 			model.storeRequestID("ONELOGIN_4fee3b046395c4e751011e97f8900b5273d56685", entityFixtures.oneloginIDP);
-		})
+		});
 
 		function signAssertion(xml) {
 			return signing.signXML(

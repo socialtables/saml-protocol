@@ -31,11 +31,15 @@
         ],
         "node/no-deprecated-api": [
             0
+        ],
+        "node/no-unpublished-require": [
+            0
         ]
     },
     "env": {
         "es6": true,
-        "node": true
+        "node": true,
+        "mocha": true
     },
     "extends": [
         "eslint:recommended",
@@ -47,6 +51,7 @@
     },
     "plugins": [
         "json",
-        "node"
+        "node",
+        "mocha"
     ]
 }
