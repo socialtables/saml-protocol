@@ -3,13 +3,13 @@
 const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
-const should = chai.should();
+const should = chai.should(); // eslint-disable-line no-unused-vars
 
 const xmldom = require("xmldom");
 const xpath  = require("xpath");
 const entityFixtures = require("./fixtures/entities");
 const ModelStub      = require("./fixtures/model-stub");
-const samlFixtures   = require("./fixtures/saml");
+//const samlFixtures   = require("./fixtures/saml");
 const credentials = require("../lib/util/credentials");
 const randomID    = require("../lib/util/random-id");
 const signing     = require("../lib/util/signing");
@@ -116,7 +116,7 @@ describe("Service Provider security checklist", function() {
 		}
 		consume.withoutSigning = function(doc) {
 			return consume(doc, true);
-		}
+		};
 
 		describe("Response element", function() {
 

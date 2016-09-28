@@ -1,13 +1,13 @@
 "use strict";
 
 const expect = require("chai").expect;
-const should = require("chai").should();
-const xmlbuilder = require("xmlbuilder");
+const should = require("chai").should(); // eslint-disable-line no-unused-vars
+//const xmlbuilder = require("xmlbuilder");
 const xmldom = require("xmldom");
 const xpath = require("xpath");
 
 const entityFixtures = require("./fixtures/entities");
-const credentialFixtures = require("./fixtures/credentials");
+//const credentialFixtures = require("./fixtures/credentials");
 const samlFixtures = require("./fixtures/saml");
 const sampleRequest = samlFixtures("onelogin/onelogin-saml-request.xml");
 

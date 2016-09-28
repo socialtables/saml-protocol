@@ -9,11 +9,11 @@ function SAMLModelStub() {
 	this.reqIDStore = {};
 	this.loginStore = {};
 
-	this.getServiceProvider  = function(entityID) {  // IDP REQUIRED
+	this.getServiceProvider  = function() {  // IDP REQUIRED
 		return Promise.resolve(this.spStub);
 	};
 
-	this.getIdentityProvider = function(entityID) {  // SP REQUIRED
+	this.getIdentityProvider = function() {  // SP REQUIRED
 		return Promise.resolve(this.idpStub);
 	};
 
@@ -31,7 +31,7 @@ function SAMLModelStub() {
 		}
 	};
 
-	this.invalidateRequestID = function(requestID, idp) { // SP OPTIONAL
+	this.invalidateRequestID = function(requestID) { // SP OPTIONAL
 		delete this.reqIDStore[requestID];
 		return Promise.resolve();
 	};
@@ -72,7 +72,7 @@ function SAMLModelStub() {
 		return Promise.resolve();
 	};
 	*/
-};
+}
 
 SAMLModelStub.whichResolvesSP = function(sp) {
 	const stub = new SAMLModelStub();
