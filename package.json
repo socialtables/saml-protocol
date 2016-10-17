@@ -1,21 +1,29 @@
 {
   "name": "@socialtables/saml-protocol",
   "version": "0.3.0",
-  "engines": {
-    "node": ">=4.0.0"
-  },
   "description": "A SAML protocol implementation for SPs and IDPs without opinionated framework bindings",
+  "author": {
+    "name": "Social Tables",
+    "url": "https://www.socialtables.com"
+  },
   "main": "lib/index.js",
   "keywords": [
     "saml",
-    "auth"
+    "authentication",
+    "sso"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/socialtables/saml-protocol.git"
+  },
+  "license": "Apache 2",
+  "engines": {
+    "node": ">=4.0.0"
+  },
   "scripts": {
     "test": "mocha test/",
     "posttest": "eslint ."
   },
-  "author": "Robert Brownstein",
-  "license": "Apache 2",
   "dependencies": {
     "node-forge": "^0.6.39",
     "xml-crypto": "^0.8.4",
