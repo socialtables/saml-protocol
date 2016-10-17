@@ -1,21 +1,33 @@
 {
-  "name": "saml-protocol",
-  "version": "0.1.0",
+  "name": "@socialtables/saml-protocol",
+  "version": "0.3.1",
   "description": "A SAML protocol implementation for SPs and IDPs without opinionated framework bindings",
+  "author": {
+    "name": "Social Tables",
+    "url": "https://www.socialtables.com"
+  },
   "main": "lib/index.js",
   "keywords": [
     "saml",
-    "auth"
+    "authentication",
+    "sso"
   ],
-  "scripts": {
-    "test": "test"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/socialtables/saml-protocol.git"
   },
-  "author": "Robert Brownstein",
-  "license": "ISC",
+  "license": "Apache 2",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "scripts": {
+    "test": "mocha test/",
+    "posttest": "eslint ."
+  },
   "dependencies": {
     "node-forge": "^0.6.39",
     "xml-crypto": "^0.8.4",
-    "xml-encryption": "^0.7.4",
+    "xml-encryption": "^0.9.0",
     "xmlbuilder": "8.2.2",
     "xmldom": "^0.1.21",
     "xpath": "^0.0.23",
@@ -24,7 +36,10 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
-    "mocha": "^2.2.5",
-    "should": "^6.0.3"
+    "eslint": "^3.2.2",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-mocha": "^4.5.1",
+    "eslint-plugin-node": "^2.0.0",
+    "mocha": "^2.2.5"
   }
 }

@@ -1,14 +1,15 @@
+
 "use strict";
 
 const assert = require("chai").assert;
-const expect = require("chai").expect;
-const should = require("chai").should();
+const expect = require("chai").expect; // eslint-disable-line no-unused-vars
+const should = require("chai").should(); // eslint-disable-line no-unused-vars
 
 describe("exports.IdentityProvider", function() {
 
 	const IdentityProvider = require("../lib").IdentityProvider;
-	const errors = require("../lib/errors");
-	const signling = require("../lib/util/signing");
+	//const errors = require("../lib/errors");
+	//const signling = require("../lib/util/signing");
 
 	const entityFixtures = require("./fixtures/entities");
 	const credentialFixtures = require("./fixtures/credentials");
@@ -52,7 +53,7 @@ describe("exports.IdentityProvider", function() {
 			const formParams = { SAMLRequest: sampleRequestBase64 };
 
 			return idp.consumePostAuthnRequest(formParams)
-				.then(result => {
+				.then(() => {
 					assert.fail("should have thrown an error");
 				})
 				.catch(err => {

@@ -1,15 +1,21 @@
 # SAML-Protocol
-A SAML protocol implementation for both service and identity providers.
-Supports the following features:
+[![CircleCI](https://circleci.com/gh/socialtables/saml-protocol.svg?style=svg&circle-token=505111c7c23aa347b341f48992c91bff9199a5cc)](https://circleci.com/gh/socialtables/saml-protocol)
 
-- creation of authentication requests, assertions, and failure responses
+A framework-agnostic SAML protocol implementation intended to support both
+ends of SSO handshakes.
+
+## Features:
+
+- request construction and response ingestion for service providers
+- request ingestion and response construction for identity providers
+- metadata creation and ingestion for both IDPs and SPs
 - request and response signing and verification
 - response encryption and decryption
 - response validation
-- metadata generation and ingestion for both parties
-- POST and REDIRECT protocol bindings
+- HTTP POST and Redirect protocol bindings
 
 ## Compatibility
+
 Node 4+; Makes use of numerous ES6 features.
 
 ## Usage example - making an AuthnRequest as a service provider
@@ -29,7 +35,6 @@ Node 4+; Makes use of numerous ES6 features.
             assert: "https://your.domain.name.com/your/consumer/endpoint"
         }
     };
-
     const idpConfig = {
         entityID: "https://your.idps.domain.name.com",
         credentials: [
@@ -83,9 +88,9 @@ return promises:
 - `verifyInResponseTo(requestID, idpConfig)`: verifies that a request with requestID was sent by the SP, rejecting on failure
 - `invalidateRequestID(requestID, idpConfig)`: invalidates a request ID after a response has been processed to prevent duplicate assertion playback attacks
 
-#### For Service Providers
+#### For Identity Providers
 
-- `getIdentityProvider(entityID)`: resolves an SP's config object by Entity ID
+- `getServiceProvider(entityID)`: resolves an SP's config object by Entity ID
 
 ### ServiceProvider Methods
 

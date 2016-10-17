@@ -1,6 +1,6 @@
 "use strict";
 
-const should = require("chai").should();
+const should = require("chai").should(); // eslint-disable-line no-unused-vars
 const xmldom = require("xmldom");
 const xpath = require("xpath");
 
@@ -81,14 +81,12 @@ describe("Signing utilities", function() {
 				const payload = sampleXML;
 				const signature = signing.createURLSignature(
 					credentials.sp1.privateKey,
-					payload,
-					"",
+					payload + alg,
 					alg
 				);
 				const isValid = signing.verifyURLSignature(
 					credentials.sp1.certificate,
-					payload,
-					"",
+					payload + alg,
 					alg,
 					signature
 				);

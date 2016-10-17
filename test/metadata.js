@@ -1,7 +1,7 @@
 "use strict";
 
 const expect = require("chai").expect;
-const should = require("chai").should();
+const should = require("chai").should(); // eslint-disable-line no-unused-vars
 const xpath = require("xpath");
 const xmldom = require("xmldom");
 
