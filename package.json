@@ -1,6 +1,6 @@
 {
   "name": "@socialtables/saml-protocol",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A SAML protocol implementation for SPs and IDPs without opinionated framework bindings",
   "author": {
     "name": "Social Tables",
