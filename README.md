@@ -88,9 +88,9 @@ return promises:
 - `verifyInResponseTo(requestID, idpConfig)`: verifies that a request with requestID was sent by the SP, rejecting on failure
 - `invalidateRequestID(requestID, idpConfig)`: invalidates a request ID after a response has been processed to prevent duplicate assertion playback attacks
 
-#### For Service Providers
+#### For Identity Providers
 
-- `getIdentityProvider(entityID)`: resolves an SP's config object by Entity ID
+- `getServiceProvider(entityID)`: resolves an SP's config object by Entity ID
 
 ### ServiceProvider Methods
 
