@@ -80,6 +80,17 @@ describe("Service Provider security checklist", function() {
 			);
 		}
 
+		function buildResponseWithoutAttributes() {
+			return responseConstruction.createSuccessResponse(
+				sp,
+				idp,
+				requestID,
+				randomID(),
+				null,
+				sp.endpoints.assert
+			);
+		}
+
 		function parse(xml) {
 			return new xmldom.DOMParser().parseFromString(xml);
 		}
@@ -225,6 +236,8 @@ describe("Service Provider security checklist", function() {
 					});
 			});
 		});
+
+
 
 		describe("Response:Assertion:Subject:SubjectConfirmation element", function() {
 
@@ -389,6 +402,17 @@ describe("Service Provider security checklist", function() {
 					});
 			});
 		});
+		
+		describe("Response:Assertion:AttributeStatement", function() {
+			it("should be absent when not provided", function() {
+				return buildResponseWithoutAttributes()
+					.then(parse)
+					.then(doc => {
+						const attrStatement = select("//saml:AttributeStatement", doc)[0];
+						should.not.exist(attrStatement);
+					});
+			});
+		});
 
 		describe("Response:Assertion:AuthnStatement", function() {
 
@@ -419,6 +443,19 @@ describe("Service Provider security checklist", function() {
 					result.nameID.should.not.be.null;
 					result.nameIDFormat.should.not.be.null;
 					result.attributes.length.should.equal(1);
+				});
+		});
+
+		it("should pass validation when attributes are not provided", function() {
+			return buildResponseWithoutAttributes()
+				.then(parse)
+				.then(consume)
+				.then(result => {
+					result.should.not.be.null;
+					result.idp.should.not.be.null;
+					result.nameID.should.not.be.null;
+					result.nameIDFormat.should.not.be.null;
+					result.attributes.length.should.equal(0);
 				});
 		});
 	});

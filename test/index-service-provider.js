@@ -272,7 +272,7 @@ describe("ServiceProvider", function() {
 					descriptor.idp.should.equal(entityFixtures.oneloginIDP);
 					descriptor.nameID.should.not.be.null;
 					descriptor.attributes.should.not.be.null;
-					descriptor.attributes.length.should.equal(3);
+					descriptor.attributes.should.have.lengthOf(3);
 				});
 		});
 
