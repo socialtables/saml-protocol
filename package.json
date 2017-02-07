@@ -1,6 +1,6 @@
 {
   "name": "@socialtables/saml-protocol",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "A SAML protocol implementation for SPs and IDPs without opinionated framework bindings",
   "author": {
     "name": "Social Tables",
@@ -25,6 +25,7 @@
     "posttest": "eslint ."
   },
   "dependencies": {
+    "moment": "^2.17.1",
     "node-forge": "0.6.39",
     "xml-crypto": "0.8.4",
     "xml-encryption": "0.9.0",
