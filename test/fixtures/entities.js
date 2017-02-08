@@ -17,6 +17,21 @@ module.exports = {
 		signAllResponses: false,
 		requireSignedRequests: false
 	},
+	simpleIDPWithLatency: {
+		entityID: "idp.test.com",
+		credentials: [
+			credentialFixtures.idp1
+		],
+		endpoints: {
+			login: {
+				post: "idp.test.com/saml/login",
+				redirect: "idp.test.com/saml/login"
+			}
+		},
+		signAllResponses: false,
+		requireSignedRequests: false,
+		responseLatencyInSecs: 2
+	},
 	simpleIDPWithCredentials: {
 		entityID: "idp.test.com",
 		credentials: [

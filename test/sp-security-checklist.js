@@ -16,6 +16,7 @@ const signing     = require("../lib/util/signing");
 const errors      = require("../lib/errors");
 const namespaces  = require("../lib/namespaces");
 const select      = xpath.useNamespaces(namespaces);
+const moment      = require("moment");
 
 /**
  * Tests for SP request construction and response handling for the
@@ -30,6 +31,87 @@ describe("Service Provider security checklist", function() {
 
 	const sp = entityFixtures.simpleSPWithCredentials;
 	const idp = entityFixtures.simpleIDPWithCredentials;
+	const idpWithLatency = entityFixtures.simpleIDPWithLatency;
+
+	describe("Response:Assertion:Subject:SubjectConfirmation:SubjectConfirmationData element (With Latency)", function() {
+
+		let model, requestID;
+
+		beforeEach(function() {
+			model = ModelStub.whichResolvesIDP(idpWithLatency);
+			requestID = randomID();
+			return model.storeRequestID(requestID, idpWithLatency);
+		});
+
+		function buildValidResponse() {
+			return responseConstruction.createSuccessResponse(
+				sp,
+				idpWithLatency,
+				requestID,
+				randomID(),
+				{ "FirstName": "Bob" },
+				sp.endpoints.assert
+			);
+		}
+
+		function parse(xml) {
+			return new xmldom.DOMParser().parseFromString(xml);
+		}
+		
+		function consume(doc, skipSigning) {
+
+			let useSP = sp;
+			let xml = new xmldom.XMLSerializer().serializeToString(doc);
+
+			// sign the resulting document - normally we sign at the protocol
+			// layer, so here we can guarentee that a signature is not yet
+			// in place
+			if (!skipSigning) {
+				xml = signing.signXML(
+					xml,
+					{
+						reference: "//*[local-name(.)='Response']/*[local-name(.)='Issuer']",
+						action: "after"
+					},
+					"//*[local-name(.)='Response']",
+					credentials.getCredentialsFromEntity(idp, "signing")[0]
+				);
+			}
+			// otherwise, use a modified SP which does not require signing
+			else {
+				useSP = Object.assign({}, sp, { requireSignedResponses: false });
+			}
+
+			return responseHandling.processResponse(model, useSP, {
+				payload: xml,
+				binding: "post",
+				isResponse: true
+			});
+		}
+		consume.withoutSigning = function(doc) {
+			return consume(doc, true);
+		};
+
+		it("must NOT be rejected if it contains a 'NotOnOrAfter' or 'NotBefore' as 1 sec latency ", function() {
+			return buildValidResponse()
+				.then(parse)
+				.then(doc => {
+					const conditions = select("//saml:Conditions", doc)[0];
+					const NotBefore = moment();
+
+					NotBefore.add(1, "seconds");
+					conditions.setAttribute("NotBefore", NotBefore.toISOString());
+
+					const NotOnOrAfter = moment();
+					NotOnOrAfter.subtract(1, "seconds");
+					conditions.setAttribute("NotOnOrAfter", NotOnOrAfter.toISOString());
+
+					return doc;
+				})
+				.then(consume).should.eventually.be.fulfilled;
+		});
+
+	});
 
 	describe("outgoing AuthnRequests", function() {
 
