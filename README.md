@@ -85,7 +85,7 @@ return promises:
 
 - `getIdentityProvider(entityID)`: resolves an IDP's config object by Entity ID
 - `storeRequestID(requestID, idpConfig)`: stores a request ID for later verification
-- `verifyInResponseTo(requestID, idpConfig)`: verifies that a request with requestID was sent by the SP, rejecting on failure
+- `verifyRequestID(requestID, idpConfig)`: verifies that a request with requestID was sent by the SP, rejecting on failure
 - `invalidateRequestID(requestID, idpConfig)`: invalidates a request ID after a response has been processed to prevent duplicate assertion playback attacks
 
 #### For Identity Providers
