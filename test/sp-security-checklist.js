@@ -29,8 +29,8 @@ describe("Service Provider security checklist", function() {
 	const responseConstruction = require("../lib/response-construction");
 	const responseHandling = require("../lib/response-handling");
 
-	const sp = entityFixtures.simpleSPWithCredentials;
-	const idp = entityFixtures.simpleIDPWithCredentials;
+	let sp = entityFixtures.simpleSPWithCredentials;
+	let idp = entityFixtures.simpleIDPWithCredentials;
 	const idpWithLatency = entityFixtures.simpleIDPWithLatency;
 
 	describe("Response:Assertion:Subject:SubjectConfirmation:SubjectConfirmationData element (With Latency)", function() {
@@ -482,6 +482,35 @@ describe("Service Provider security checklist", function() {
 						err.errors.length.should.equal(1);
 						err.errors.join("").should.have.string("Audience does not match");
 					});
+			});
+
+			it("should be ok if the entityID is just a string", function () {
+				return buildValidResponse()
+					.then(parse)
+					.then(doc => {
+						const audience = select("//saml:Conditions/saml:AudienceRestriction/saml:Audience", doc)[0];
+						audience.textContent = sp.entityID;
+						return doc;
+					})
+					.then(consume).should.eventually.be.fulfilled;
+			});
+
+			let _sp, _idp;
+			before(function () {
+				_sp = sp;
+				_idp = idp;
+				sp = entityFixtures.simpleSPWithCredentialsAndURIEntityID;
+				idp = entityFixtures.simpleIDPWithCredentialsAndURIEntityID;
+			});
+			after(function () {
+				sp = _sp;
+				idp = _idp;
+			});
+
+			it("should be ok if the entityIDs are different strings that resolve to the same URL", function () {
+				return buildValidResponse()
+					.then(parse)
+					.then(consume).should.eventually.be.fulfilled;
 			});
 		});
 		

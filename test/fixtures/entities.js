@@ -50,6 +50,24 @@ module.exports = {
 		requireSignedRequests: false
 	},
 
+	simpleIDPWithCredentialsAndURIEntityID: {
+		entityID: "https://entityuri-idp.test.com",
+		credentials: [
+			credentialFixtures.idp1
+		],
+		endpoints: {
+			login: "https://entityuri-idp.test.com/saml/login",
+			logout: {
+				post: "https://entityuri-idp.test.com/saml/logout"
+			}
+		},
+		nameIDFormats: [
+			"urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
+		],
+		signAllResponses: true,
+		requireSignedRequests: false
+	},
+
 	// SPs
 	simpleSP: {
 		entityID: "sp.test.com",
@@ -68,6 +86,23 @@ module.exports = {
 		],
 		endpoints: {
 			assert: "sp.test.com/assert"
+		},
+		signAllRequests: true,
+		requireSignedResponses: true,
+		extendedRequirements: {
+			InResponseTo: true,
+			NotOnOrAfter: true,
+			Recipient: true
+		}
+	},
+	simpleSPWithCredentialsAndURIEntityID: {
+		entityID: "https://entityuri-idp.test.com",
+		credentials: [
+			credentialFixtures.sp1,
+			credentialFixtures.sp2
+		],
+		endpoints: {
+			assert: "https://entityuri-idp.test.com/assert"
 		},
 		signAllRequests: true,
 		requireSignedResponses: true,
