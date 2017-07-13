@@ -2,10 +2,7 @@
   "name": "@socialtables/saml-protocol",
   "version": "0.3.3",
   "description": "A SAML protocol implementation for SPs and IDPs without opinionated framework bindings",
-  "author": {
-    "name": "Social Tables",
-    "url": "https://www.socialtables.com"
-  },
+  "author": "Social Tables (https://www.socialtables.com)",
   "main": "lib/index.js",
   "keywords": [
     "saml",
@@ -16,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/socialtables/saml-protocol.git"
   },
-  "license": "Apache 2",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=4.0.0"
   },
@@ -42,5 +39,12 @@
     "eslint-plugin-mocha": "^4.5.1",
     "eslint-plugin-node": "^2.0.0",
     "mocha": "^2.2.5"
+  },
+  "bugs": {
+    "url": "https://github.com/socialtables/saml-protocol/issues"
+  },
+  "homepage": "https://github.com/socialtables/saml-protocol#readme",
+  "directories": {
+    "test": "test"
   }
 }
