@@ -1,9 +1,7 @@
-"use strict";
+import fs from 'fs';
+import path from 'path';
 
-const fs = require("fs");
-const path = require("path");
-
-module.exports = function get(fixtureName) {
-	const resolvedPath = path.resolve(__dirname, fixtureName);
-	return fs.readFileSync(resolvedPath, "utf8");
-};
+export default function get(fixtureName) {
+  const resolvedPath = path.resolve(__dirname, fixtureName);
+  return fs.readFileSync(resolvedPath, 'utf8');
+}

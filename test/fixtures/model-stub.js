@@ -1,91 +1,85 @@
-"use strict";
+class SAMLModelStub {
+  constructor() {
+    this.idpStub = {};
+    this.spStub = {};
+    this.reqIDStore = {};
+    this.loginStore = {};
+  }
 
-module.exports = SAMLModelStub;
+  static whichResolvesSP(sp) {
+    const stub = new SAMLModelStub();
+    stub.spStub = sp;
+    return stub;
+  }
 
-function SAMLModelStub() {
+  static whichResolvesIDP(idp) {
+    const stub = new SAMLModelStub();
+    stub.idpStub = idp;
+    return stub;
+  }
 
-	this.idpStub = {};
-	this.spStub = {};
-	this.reqIDStore = {};
-	this.loginStore = {};
+  async getServiceProvider() { // IDP REQUIRED
+    return this.spStub;
+  }
 
-	this.getServiceProvider  = function() {  // IDP REQUIRED
-		return Promise.resolve(this.spStub);
-	};
+  async getIdentityProvider() { // SP REQUIRED
+    return this.idpStub;
+  }
 
-	this.getIdentityProvider = function() {  // SP REQUIRED
-		return Promise.resolve(this.idpStub);
-	};
+  async storeRequestID(requestID, idp) { // SP REQUIRED
+    this.reqIDStore[requestID] = idp.entityID;
+  }
 
-	this.storeRequestID = function(requestID, idp) {  // SP REQUIRED
-		this.reqIDStore[requestID] = idp.entityID;
-		return Promise.resolve();
-	};
+  async verifyRequestID(requestID, idp) { // SP REQUIRED
+    if (this.reqIDStore[requestID] !== idp.entityID) {
+      throw new Error();
+    }
+  }
 
-	this.verifyRequestID = function(requestID, idp) {  // SP REQUIRED
-		if (this.reqIDStore[requestID] == idp.entityID) {
-			return Promise.resolve();
-		}
-		else {
-			return Promise.reject();
-		}
-	};
+  async invalidateRequestID(requestID) { // SP OPTIONAL
+    delete this.reqIDStore[requestID];
+  }
 
-	this.invalidateRequestID = function(requestID) { // SP OPTIONAL
-		delete this.reqIDStore[requestID];
-		return Promise.resolve();
-	};
+  getNow() {
+    return this.now || new Date();
+  }
 
-	this.getNow = function() {
-		return this.now || new Date();
-	};
+  validateLikeIts(targetDate) {
+    this.date = targetDate;
+  }
 
-	// General
-	// getServiceProvider  (entityID)         IDP
-	// getIdentityProvider (entityID)         SP
+  // General
+  // getServiceProvider  (entityID)         IDP
+  // getIdentityProvider (entityID)         SP
 
-	// Single Sign On
-	// storeRequestID  (entityID, requestID)  SP
-	// verifyRequestID (entityID, requestID)  SP                    IDP, SP
+  // Single Sign On
+  // storeRequestID  (entityID, requestID)  SP
+  // verifyRequestID (entityID, requestID)  SP                    IDP, SP
 
-	/*
-	Planned for SLO support
+  /*
+  Planned for SLO support
 
 
-	Single Logout
-	saveLogin (entityID, nameID)           IDP
-	getEntitiesWithLogin (nameID)          IDP, SP
-	logout (nameID)
+  Single Logout
+  saveLogin (entityID, nameID)           IDP
+  getEntitiesWithLogin (nameID)          IDP, SP
+  logout (nameID)
 
-	this.saveLogin = function(entityID, nameID) { // IDP & SP OPTIONAL (SLO)
-		this.loginStore[nameID] = this.loginStore[nameID] || [];
-		this.loginStore[nameID].push(entityID);
-		return Promise.resolve();
-	};
+  this.saveLogin = function(entityID, nameID) { // IDP & SP OPTIONAL (SLO)
+    this.loginStore[nameID] = this.loginStore[nameID] || [];
+    this.loginStore[nameID].push(entityID);
+    return Promise.resolve();
+  };
 
-	this.getEntitiesWithLogin = function(nameID) { // IDP & SP OPTIONAL (SLO)
-		return Promise.resolve(this.loginStore[nameID] || []);
-	};
+  this.getEntitiesWithLogin = function(nameID) { // IDP & SP OPTIONAL (SLO)
+    return Promise.resolve(this.loginStore[nameID] || []);
+  };
 
-	this.logout = function(nameID) { // IDP & SP OPTIONAL (SLO)
-		delete this.loginStore[nameID];
-		return Promise.resolve();
-	};
-	*/
+  this.logout = function(nameID) { // IDP & SP OPTIONAL (SLO)
+    delete this.loginStore[nameID];
+    return Promise.resolve();
+  };
+  */
 }
 
-SAMLModelStub.whichResolvesSP = function(sp) {
-	const stub = new SAMLModelStub();
-	stub.spStub = sp;
-	return stub;
-};
-
-SAMLModelStub.whichResolvesIDP = function(idp) {
-	const stub = new SAMLModelStub();
-	stub.idpStub = idp;
-	return stub;
-};
-
-SAMLModelStub.prototype.validateLikeIts = function(targetDate) {
-	this.date = targetDate;
-};
+export default SAMLModelStub;

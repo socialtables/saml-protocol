@@ -1,141 +1,131 @@
-"use strict";
+import { expect, should } from 'chai';
+import { DOMParser } from 'xmldom';
+import xpath from 'xpath';
+import * as protocolBindings from '../lib/protocol-bindings';
 
-const expect = require("chai").expect;
-const should = require("chai").should(); // eslint-disable-line no-unused-vars
-//const xmlbuilder = require("xmlbuilder");
-const xmldom = require("xmldom");
-const xpath = require("xpath");
+import entityFixtures from './fixtures/entities';
+import samlFixtures from './fixtures/saml';
 
-const entityFixtures = require("./fixtures/entities");
-//const credentialFixtures = require("./fixtures/credentials");
-const samlFixtures = require("./fixtures/saml");
-const sampleRequest = samlFixtures("onelogin/onelogin-saml-request.xml");
+should();
 
-describe("Protocol binding functions", function() {
+const sampleRequest = samlFixtures('onelogin/onelogin-saml-request.xml');
 
-	const protocolBindings = require("../lib/protocol-bindings");
+describe('Protocol binding functions', () => {
+  describe('expandBindings', () => {
+    it('should expand abbreviated protocol bindings within an endpoint list', () => {
+      const endpoints = {
+        login: 'localhost/login',
+      };
+      const expanded = protocolBindings.expandBindings(endpoints);
+      expanded.login.post.should.equal(endpoints.login);
+      expanded.login.redirect.should.equal(endpoints.login);
+    });
+  });
 
-	describe("expandBindings", function() {
-		it("should expand abbreviated protocol bindings within an endpoint list", function() {
-			const endpoints = {
-				login: "localhost/login"
-			};
-			const expanded = protocolBindings.expandBindings(endpoints);
-			expanded.login.post.should.equal(endpoints.login);
-			expanded.login.redirect.should.equal(endpoints.login);
-		});
-	});
+  describe('chooseBinding', () => {
+    it('should select a post binding if given a choice of post or redirect bindings', () => {
+      const recipient = {
+        endpoints: {
+          login: 'localhost/login',
+        },
+      };
+      const choice = protocolBindings.chooseBinding(recipient, 'login');
+      choice.binding.should.equal('post');
+      choice.url.should.equal(recipient.endpoints.login);
+    });
 
-	describe("chooseBinding", function() {
-		it("should select a post binding if given a choice of post or redirect bindings", function() {
-			const recipient = {
-				endpoints: {
-					login: "localhost/login"
-				}
-			};
-			const choice = protocolBindings.chooseBinding(recipient, "login");
-			choice.binding.should.equal("post");
-			choice.url.should.equal(recipient.endpoints.login);
-		});
+    it('should select a redirect binding if it is specified as the default', () => {
+      const recipient = {
+        endpoints: {
+          login: {
+            post: 'localhost/login',
+            redirect: 'localhost/login/redirect',
+            _default: 'redirect',
+          },
+        },
+      };
+      const choice = protocolBindings.chooseBinding(recipient, 'login');
+      choice.binding.should.equal('redirect');
+      choice.url.should.equal(recipient.endpoints.login.redirect);
+    });
+  });
 
-		it("should select a redirect binding if it is specified as the default", function() {
-			const recipient = {
-				endpoints: {
-					login: {
-						post: "localhost/login",
-						redirect: "localhost/login/redirect",
-						_default: "redirect"
-					}
-				}
-			};
-			const choice = protocolBindings.chooseBinding(recipient, "login");
-			choice.binding.should.equal("redirect");
-			choice.url.should.equal(recipient.endpoints.login.redirect);
-		});
-	});
+  describe('applyPostBinding and getDataFromPostBinding', () => {
+    it('can work together to transmit and recieve an unsigned payload', () => {
+      const payload = sampleRequest;
 
-	describe("applyPostBinding and getDataFromPostBinding", function() {
+      const bound = protocolBindings.applyPostBinding(
+        entityFixtures.simpleSP,
+        entityFixtures.simpleIDP,
+        payload,
+        false,
+        entityFixtures.simpleIDP.endpoints.login.post,
+        'login',
+      );
 
-		it("can work together to transmit and recieve an unsigned payload", function() {
+      const recieved = protocolBindings.getDataFromPostBinding(bound.formBody);
 
-			const payload = sampleRequest;
+      recieved.should.not.be.null;
+      recieved.payload.should.equal(payload);
+    });
 
-			const bound = protocolBindings.applyPostBinding(
-				entityFixtures.simpleSP,
-				entityFixtures.simpleIDP,
-				payload,
-				false,
-				entityFixtures.simpleIDP.endpoints.login.post,
-				"login"
-			);
+    it('can work together to transmit and recieve a signed payload', () => {
+      const payload = sampleRequest;
 
-			const recieved = protocolBindings.getDataFromPostBinding(bound.formBody);
+      const bound = protocolBindings.applyPostBinding(
+        entityFixtures.simpleSPWithCredentials,
+        entityFixtures.simpleIDPWithCredentials,
+        payload,
+        false,
+        entityFixtures.simpleIDP.endpoints.login.post,
+        'login',
+      );
 
-			recieved.should.not.be.null;
-			recieved.payload.should.equal(payload);
-		});
+      const recieved = protocolBindings.getDataFromPostBinding(bound.formBody);
 
-		it("can work together to transmit and recieve a signed payload", function() {
+      recieved.should.not.be.null;
+      recieved.payload.should.not.equal(payload);
+      const recievedDOM = new DOMParser().parseFromString(recieved.payload);
+      xpath.select("//*[local-name(.)='Signature']", recievedDOM)[0].should.not.be.null;
+    });
+  });
 
-			const payload = sampleRequest;
+  describe('applyRedirectBinding and getDataFromRedirectBinding', () => {
+    it('can work together to transmit and recieve an unsigned payload', () => {
+      const payload = sampleRequest;
 
-			const bound = protocolBindings.applyPostBinding(
-				entityFixtures.simpleSPWithCredentials,
-				entityFixtures.simpleIDPWithCredentials,
-				payload,
-				false,
-				entityFixtures.simpleIDP.endpoints.login.post,
-				"login"
-			);
+      const bound = protocolBindings.applyRedirectBinding(
+        entityFixtures.simpleSP,
+        entityFixtures.simpleIDP,
+        payload,
+        false,
+        entityFixtures.simpleIDP.endpoints.login.redirect,
+      );
 
-			const recieved = protocolBindings.getDataFromPostBinding(bound.formBody);
+      const recieved = protocolBindings.getDataFromRedirectBinding(bound.url.query);
 
-			recieved.should.not.be.null;
-			recieved.payload.should.not.equal(payload);
-			const recievedDOM = new xmldom.DOMParser().parseFromString(recieved.payload);
-			xpath.select("//*[local-name(.)='Signature']", recievedDOM)[0].should.not.be.null;
-		});
-	});
+      recieved.should.not.be.null;
+      recieved.payload.should.equal(payload);
+      expect(recieved.verifySignature).to.be.falsey;
+    });
 
-	describe("applyRedirectBinding and getDataFromRedirectBinding", function() {
+    it('can work together to transmit and recieve a signed payload - and verify its signature', () => {
+      const payload = sampleRequest;
 
-		it("can work together to transmit and recieve an unsigned payload", function() {
+      const bound = protocolBindings.applyRedirectBinding(
+        entityFixtures.simpleSPWithCredentials,
+        entityFixtures.simpleIDPWithCredentials,
+        payload,
+        false,
+        entityFixtures.simpleIDP.endpoints.login.redirect,
+      );
 
-			const payload = sampleRequest;
+      const recieved = protocolBindings.getDataFromRedirectBinding(bound.url.query);
 
-			const bound = protocolBindings.applyRedirectBinding(
-				entityFixtures.simpleSP,
-				entityFixtures.simpleIDP,
-				payload,
-				false,
-				entityFixtures.simpleIDP.endpoints.login.redirect
-			);
+      recieved.should.not.be.null;
+      recieved.payload.should.equal(payload);
 
-			const recieved = protocolBindings.getDataFromRedirectBinding(bound.url.query);
-
-			recieved.should.not.be.null;
-			recieved.payload.should.equal(payload);
-			expect(recieved.verifySignature).to.be.falsey;
-		});
-
-		it("can work together to transmit and recieve a signed payload - and verify its signature", function() {
-
-			const payload = sampleRequest;
-
-			const bound = protocolBindings.applyRedirectBinding(
-				entityFixtures.simpleSPWithCredentials,
-				entityFixtures.simpleIDPWithCredentials,
-				payload,
-				false,
-				entityFixtures.simpleIDP.endpoints.login.redirect
-			);
-
-			const recieved = protocolBindings.getDataFromRedirectBinding(bound.url.query);
-
-			recieved.should.not.be.null;
-			recieved.payload.should.equal(payload);
-
-			recieved.verifySignature(entityFixtures.simpleSPWithCredentials).should.be.true;
-		});
-	});
+      recieved.verifySignature(entityFixtures.simpleSPWithCredentials).should.be.true;
+    });
+  });
 });
