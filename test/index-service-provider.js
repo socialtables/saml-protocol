@@ -76,11 +76,11 @@ describe('ServiceProvider', function () {
       descriptor.should.not.be.null;
       descriptor.method.should.equal('GET');
       descriptor.url.should.not.be.null;
-      descriptor.url.href.should.equal(idp.endpoints.login.redirect);
-      descriptor.url.query.should.not.be.null;
-      descriptor.url.query.SAMLRequest.should.not.be.null;
-      expect(descriptor.url.query.Signature).to.be.undefined;
-      const requestBase64 = descriptor.url.query.SAMLRequest;
+      descriptor.url.href.startsWith(idp.endpoints.login.redirect).should.be.true;
+      descriptor.url.searchParams.should.not.be.null;
+      descriptor.url.searchParams.get('SAMLRequest').should.not.be.null;
+      expect(descriptor.url.searchParams.get('Signature')).to.be.null;
+      const requestBase64 = descriptor.url.searchParams.get('SAMLRequest');
       const requestXML = zlib.inflateRawSync(Buffer.from(requestBase64, 'base64')).toString('utf8');
       const request = new DOMParser().parseFromString(requestXML);
       xpath.select("//*[local-name(.)='AuthnRequest']", request).length.should.equal(1);
@@ -94,20 +94,20 @@ describe('ServiceProvider', function () {
       descriptor.should.not.be.null;
       descriptor.method.should.equal('GET');
       descriptor.url.should.not.be.null;
-      descriptor.url.href.should.equal(idp.endpoints.login.redirect);
-      descriptor.url.query.should.not.be.null;
-      descriptor.url.query.SAMLRequest.should.not.be.null;
-      descriptor.url.query.Signature.should.be.defined;
-      const requestBase64 = descriptor.url.query.SAMLRequest;
+      descriptor.url.href.startsWith(idp.endpoints.login.redirect).should.be.true;
+      descriptor.url.searchParams.should.not.be.null;
+      descriptor.url.searchParams.get('SAMLRequest').should.not.be.null;
+      descriptor.url.searchParams.get('Signature').should.not.be.null;
+      const requestBase64 = descriptor.url.searchParams.get('SAMLRequest');
       const requestXML = zlib.inflateRawSync(Buffer.from(requestBase64, 'base64')).toString('utf8');
       const request = new DOMParser().parseFromString(requestXML);
       xpath.select("//*[local-name(.)='AuthnRequest']", request).length.should.equal(1);
 
       signing.verifyURLSignature(
         sp.sp.credentials[0].certificate,
-        protocolBindings.constructSignaturePayload(descriptor.url.query),
-        descriptor.url.query.SigAlg,
-        descriptor.url.query.Signature,
+        protocolBindings.constructSignaturePayload(descriptor.url.searchParams),
+        descriptor.url.searchParams.get('SigAlg'),
+        descriptor.url.searchParams.get('Signature'),
       ).should.equal(true);
     });
   });
@@ -270,7 +270,7 @@ describe('ServiceProvider', function () {
       const responsePayload = samlFixtures('onelogin/onelogin-saml-response.xml');
       const signedPayload = await signAssertion(responsePayload);
       const encryptedAndSignedPayload = await encryptAssertion(signedPayload);
-      const signedEncryptedSignedPayload = await signAssertion(encryptedAndSignedPayload);
+      const signedEncryptedSignedPayload = await signResponse(encryptedAndSignedPayload);
       const postResponse = await prepareAsPostRequest(signedEncryptedSignedPayload);
       const descriptor = await sp.consumePostResponse(postResponse);
       descriptor.should.not.be.null;
@@ -336,7 +336,8 @@ describe('ServiceProvider', function () {
 
       const responsePayload = samlFixtures('onelogin/onelogin-saml-response.xml');
       try {
-        await sp.consumePostResponse(responsePayload);
+        const postResponse = await prepareAsPostRequest(responsePayload);
+        await sp.consumePostResponse(postResponse);
       } catch (error) {
         error.should.not.be.null;
         error.message.should.have.string('invalid assertion');
@@ -355,7 +356,8 @@ describe('ServiceProvider', function () {
       );
 
       try {
-        await sp.consumePostResponse(failurePayload);
+        const postResponse = await prepareAsPostRequest(failurePayload);
+        await sp.consumePostResponse(postResponse);
       } catch (error) {
         error.should.not.be.null;
         expect(error instanceof RejectionError);
@@ -448,7 +450,7 @@ describe('ServiceProvider', function () {
       const responsePayload = samlFixtures('onelogin/onelogin-saml-response.xml');
       const redirectResponse = await prepareAsRedirectRequest(responsePayload);
       try {
-        await sp.consumePostResponse(redirectResponse);
+        await sp.consumeRedirectResponse(redirectResponse);
       } catch (error) {
         error.should.not.be.null;
         error.errors[0].should.have.string('signature');
@@ -606,7 +608,7 @@ describe('ServiceProvider', function () {
       spConfFromData.credentials.length.should.equal(2);
       spConfFromData.credentials.forEach((credential) => {
         credential.certificate.should.not.be.null;
-        expect(credential.privateKey).not.to.be.defined;
+        expect(credential.privateKey).to.be.undefined;
       });
 
       spConfFromData.requireSignedResponses.should.be.true;
@@ -621,7 +623,7 @@ describe('ServiceProvider', function () {
       idp.should.not.be.null;
       idp.entityID.should.equal('http://idp.ssocircle.com');
       idp.credentials.length.should.equal(2);
-      idp.endpoints.login.length.should.be.equal(3);
+      idp.endpoints.login.should.exist;
     });
   });
 

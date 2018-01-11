@@ -102,11 +102,11 @@ describe('Protocol binding functions', () => {
         entityFixtures.simpleIDP.endpoints.login.redirect,
       );
 
-      const recieved = protocolBindings.getDataFromRedirectBinding(bound.url.query);
+      const recieved = protocolBindings.getDataFromRedirectBinding(bound.url.searchParams);
 
       recieved.should.not.be.null;
       recieved.payload.should.equal(payload);
-      expect(recieved.verifySignature).to.be.falsey;
+      expect(!!recieved.verifySignature).to.be.false;
     });
 
     it('can work together to transmit and recieve a signed payload - and verify its signature', () => {
@@ -120,7 +120,7 @@ describe('Protocol binding functions', () => {
         entityFixtures.simpleIDP.endpoints.login.redirect,
       );
 
-      const recieved = protocolBindings.getDataFromRedirectBinding(bound.url.query);
+      const recieved = protocolBindings.getDataFromRedirectBinding(bound.url.searchParams);
 
       recieved.should.not.be.null;
       recieved.payload.should.equal(payload);

@@ -16,7 +16,7 @@ ends of SSO handshakes.
 
 ## Compatibility
 
-Node 4+; Makes use of numerous ES6 features.
+Node 8+; Makes use of numerous ES6 features and the new URL api
 
 ## Usage example - making an AuthnRequest as a service provider
 
@@ -151,3 +151,7 @@ return promises:
 - `produceIDPMetadata()`: returns a string containing the IDP's XML metadata, the standard for passing configuration between SAML-supporting entities
 
 - `getSPFromMetadata(xml)`: accepts an SP's XML metadata and produces a config object for use with this library
+
+
+# additional notes
+Currently we're blocked on XMLDOM 0.1.21 as a dependency because of: https://github.com/jindw/xmldom/pull/221

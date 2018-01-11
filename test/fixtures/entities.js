@@ -9,8 +9,8 @@ export default {
     credentials: [],
     endpoints: {
       login: {
-        post: 'idp.test.com/saml/login',
-        redirect: 'idp.test.com/saml/login',
+        post: 'https://idp.test.com/saml/login',
+        redirect: 'https://idp.test.com/saml/login',
       },
     },
     signAllResponses: false,
@@ -23,8 +23,8 @@ export default {
     ],
     endpoints: {
       login: {
-        post: 'idp.test.com/saml/login',
-        redirect: 'idp.test.com/saml/login',
+        post: 'https://idp.test.com/saml/login',
+        redirect: 'https://idp.test.com/saml/login',
       },
     },
     signAllResponses: false,
@@ -37,9 +37,9 @@ export default {
       credentialFixtures.idp1,
     ],
     endpoints: {
-      login: 'idp.test.com/saml/login',
+      login: 'https://idp.test.com/saml/login',
       logout: {
-        post: 'idp.test.com/saml/logout',
+        post: 'https://idp.test.com/saml/logout',
       },
     },
     nameIDFormats: [
@@ -72,7 +72,7 @@ export default {
     entityID: 'sp.test.com',
     credentials: [],
     endpoints: {
-      assert: 'sp.test.com/assert',
+      assert: 'https://sp.test.com/assert',
     },
     forcePassive: false,
     forceAuthentication: false,
@@ -90,7 +90,7 @@ export default {
       credentialFixtures.sp2,
     ],
     endpoints: {
-      assert: 'sp.test.com/assert',
+      assert: 'https://sp.test.com/assert',
     },
     forcePassive: false,
     forceAuthentication: false,

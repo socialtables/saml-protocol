@@ -41,6 +41,7 @@ describe('Metadata creation and ingestion functions', () => {
   describe('buildIDPMetadata and getIDPFromMetadata', () => {
     it('Should get an IDP config matching the supplied IDP as a result of ingesting metadata', () => {
       const idp = entityFixtures.simpleIDPWithCredentials;
+      idp.requireSignedRequests = true;
 
       const encoded = metadata.buildIDPMetadata(idp);
       const decoded = metadata.getIDPFromMetadata(encoded);

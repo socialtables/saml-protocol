@@ -45,7 +45,11 @@ describe('exports.IdentityProvider', () => {
       const sampleRequestBase64 = Buffer.from(requestPayload, 'utf8').toString('base64');
       const formParams = { SAMLRequest: sampleRequestBase64 };
 
-      assert.throws(async () => { await idp.consumePostAuthnRequest(formParams); }, /IDP requires authentication requests to be signed/);
+      try {
+        await idp.consumePostAuthnRequest(formParams);
+      } catch (error) {
+        error.message.should.have.string('IDP requires authentication requests to be signed');
+      }
     });
 
     it('accepts an AuthnRequest encoded with a POST binding with a valid signature when signing is required', async () => {
