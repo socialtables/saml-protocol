@@ -1,7 +1,6 @@
 {
-  "name": "@barco/saml-protocol",
-  "version": "0.3.8",
-  "publishConfig": { "registry": "https://bin.barco.com/artifactory/api/npm/npm-local"},
+  "name": "@socialtables/saml-protocol",
+  "version": "0.3.4",
   "description": "A SAML protocol implementation for SPs and IDPs without opinionated framework bindings",
   "author": "Social Tables (https://www.socialtables.com)",
   "main": "./dist/index.js",
