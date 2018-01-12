@@ -94,11 +94,22 @@ return promises:
 
 ### ServiceProvider Methods
 
-- `produceAuthnRequest(idpConfig)`: resolves to an object describing a request to the IDP, with either a post or redirect binding which is automatically selected based on the IDP's configuration. Contains the following properties:
+- `produceAuthnRequest(idpConfig, options)`: resolves to an object describing a request to the IDP, with either a post or redirect binding which is automatically selected based on the IDP's configuration. Contains the following properties:
   - `method`: either "POST" or "GET", indicating what flavor of HTTP request the user's browser should make to the IDP. The library automatically selects a post or redirect binding based on the IDP's configuration.
   - `url`: a URL object indicating the URL to which the user should be sent, including query parameters for redirect bindings
   - `contentType`: the content type to use when a post request is produced
   - `formBody`: the form parameters to send in a post request to the IDP
+
+    The options for the request, see the [SAML2 core specification](http://saml.xml.org/saml-specifications) for more information:
+  - `isPassive`: sets the `IsPassive` boolean on the request. If `true`, the identity provider and the user agent itself MUST NOT visibly take control of the user interface from the requester and interact with the presenter in a noticeable fashion. If a value is not provided, the default is `false`.
+  - `forceAuthn`: sets the `ForceAuthN` boolean on the request. If `true`, the identity provider MUST authenticate the presenter directly rather than
+rely on a previous security context. If a value is not provided, the default is `false`. However, if both
+ForceAuthn and IsPassive are `true`, the identity provider MUST NOT freshly authenticate the
+presenter unless the constraints of `IsPassive` can be met.
+  - `sendAuthnContext`: Wether to add the `RequestedAuthnContext` node to the request.
+  - `authnContextClassComparison`: Specifies the comparison method used to evaluate the requested context classes or statements, one
+of `exact`, `minimum`, `maximum`, or `better`. The default is `exact`,
+  - `authnContextClasses`: Specifies one or more URI references identifying authentication context classes or declarations. The default is: `[PasswordProtectedTransport]`
 
 - `consumePostResponse(formParams)`: accepts form parameters sent to an assertion post endpoint, and resolves to a description of the assertion or rejects with an error. In the event of success, will resolve the following properties:
   - `idp`: the config for the IDP which sent the assertion
