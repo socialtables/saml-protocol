@@ -1,123 +1,107 @@
-"use strict";
+import { expect, should } from 'chai';
+import xpath from 'xpath';
+import { DOMParser } from 'xmldom';
 
-const expect = require("chai").expect;
-const should = require("chai").should(); // eslint-disable-line no-unused-vars
-const xpath = require("xpath");
-const xmldom = require("xmldom");
+import * as metadata from '../lib/metadata';
+import entityFixtures from './fixtures/entities';
 
-const metadata = require("../lib/metadata");
+should();
 
-const entityFixtures = require("./fixtures/entities");
+describe('Metadata creation and ingestion functions', () => {
+  describe('buildIDPMetadata', () => {
+    const { simpleIDP, simpleIDPWithCredentials: idpWithCredentials } = entityFixtures;
 
-describe("Metadata creation and ingestion functions", function() {
+    it('should describe a simple IDP as valid XML', () => {
+      const xml = metadata.buildIDPMetadata(simpleIDP);
+      const node = new DOMParser().parseFromString(xml);
+      xml.should.not.be.null;
+      node.should.not.be.null;
 
-	describe("buildIDPMetadata", function() {
+      xpath.select("//*[local-name(.)='IDPSSODescriptor']", node)
+        .length.should.equal(1);
+      xpath.select("//*[local-name(.)='SingleSignOnService']", node)
+        .length.should.equal(2);
+    });
 
-		const simpleIDP = entityFixtures.simpleIDP;
-		const idpWithCredentials = entityFixtures.simpleIDPWithCredentials;
+    it('should describe an IDP with credentials appropreately', () => {
+      const xml = metadata.buildIDPMetadata(idpWithCredentials);
+      const node = new DOMParser().parseFromString(xml);
+      xml.should.not.be.null;
+      node.should.not.be.null;
 
-		it("should describe a simple IDP as valid XML", function() {
+      xpath.select("//*[local-name(.)='IDPSSODescriptor']", node)
+        .length.should.equal(1);
+      xpath.select("//*[local-name(.)='SingleSignOnService']", node)
+        .length.should.equal(2);
+      xpath.select("//*[local-name(.)='KeyDescriptor']", node)
+        .length.should.equal(idpWithCredentials.credentials.length);
+    });
+  });
 
-			const xml = metadata.buildIDPMetadata(simpleIDP);
-			const node = new xmldom.DOMParser().parseFromString(xml);
-			xml.should.not.be.null;
-			node.should.not.be.null;
+  describe('buildIDPMetadata and getIDPFromMetadata', () => {
+    it('Should get an IDP config matching the supplied IDP as a result of ingesting metadata', () => {
+      const idp = entityFixtures.simpleIDPWithCredentials;
+      idp.requireSignedRequests = true;
 
-			xpath.select("//*[local-name(.)='IDPSSODescriptor']", node)
-				.length.should.equal(1);
-			xpath.select("//*[local-name(.)='SingleSignOnService']", node)
-				.length.should.equal(2);
-		});
+      const encoded = metadata.buildIDPMetadata(idp);
+      const decoded = metadata.getIDPFromMetadata(encoded);
 
-		it("should describe an IDP with credentials appropreately", function() {
+      decoded.should.not.be.null;
+      decoded.entityID.should.equal(idp.entityID);
+      decoded.endpoints.login.post.should.equal(idp.endpoints.login);
+      decoded.endpoints.login.redirect.should.equal(idp.endpoints.login);
+      decoded.credentials.should.not.be.null;
+      decoded.credentials[0].certificate.should.not.be.null;
+      decoded.credentials[0].certificate.should.equal(idp.credentials[0].certificate); // TODO: fix brittle string comp
+      expect(decoded.requireSignedRequests).to.be.ok;
+    });
+  });
 
-			const xml = metadata.buildIDPMetadata(idpWithCredentials);
-			const node = new xmldom.DOMParser().parseFromString(xml);
-			xml.should.not.be.null;
-			node.should.not.be.null;
+  describe('buildSPMetadata', () => {
+    const { simpleSP, simpleSPWithCredentials: spWithCredentials } = entityFixtures;
 
-			xpath.select("//*[local-name(.)='IDPSSODescriptor']", node)
-				.length.should.equal(1);
-			xpath.select("//*[local-name(.)='SingleSignOnService']", node)
-				.length.should.equal(2);
-			xpath.select("//*[local-name(.)='KeyDescriptor']", node)
-				.length.should.equal(idpWithCredentials.credentials.length);
-		});
+    it('should describe a simple SP as valid XML', () => {
+      const xml = metadata.buildSPMetadata(simpleSP);
+      const node = new DOMParser().parseFromString(xml);
+      xml.should.not.be.null;
+      node.should.not.be.null;
 
-	});
+      xpath.select("//*[local-name(.)='SPSSODescriptor']", node)
+        .length.should.equal(1);
+      xpath.select("//*[local-name(.)='AssertionConsumerService']", node)
+        .length.should.equal(2);
+    });
 
-	describe("buildIDPMetadata and getIDPFromMetadata", function() {
+    it('should describe an SP with credentials appropreately', () => {
+      const xml = metadata.buildSPMetadata(spWithCredentials);
+      const node = new DOMParser().parseFromString(xml);
+      xml.should.not.be.null;
+      node.should.not.be.null;
 
-		it("Should get an IDP config matching the supplied IDP as a result of ingesting metadata", function() {
+      xpath.select("//*[local-name(.)='SPSSODescriptor']", node)
+        .length.should.equal(1);
+      xpath.select("//*[local-name(.)='AssertionConsumerService']", node)
+        .length.should.equal(2);
+      xpath.select("//*[local-name(.)='KeyDescriptor']", node)
+        .length.should.equal(spWithCredentials.credentials.length);
+    });
+  });
 
-			const idp = entityFixtures.simpleIDPWithCredentials;
+  describe('buildSPMetadata and getSPFromMetadata', () => {
+    it('Should get an SP config matching the supplied SP as a result of ingesting metadata', () => {
+      const sp = entityFixtures.simpleSPWithCredentials;
 
-			const encoded = metadata.buildIDPMetadata(idp);
-			const decoded = metadata.getIDPFromMetadata(encoded);
+      const encoded = metadata.buildSPMetadata(sp);
+      const decoded = metadata.getSPFromMetadata(encoded);
 
-			decoded.should.not.be.null;
-			decoded.entityID.should.equal(idp.entityID);
-			decoded.endpoints.login.post.should.equal(idp.endpoints.login);
-			decoded.endpoints.login.redirect.should.equal(idp.endpoints.login);
-			decoded.credentials.should.not.be.null;
-			decoded.credentials[0].certificate.should.not.be.null;
-			decoded.credentials[0].certificate.should.equal(idp.credentials[0].certificate);  // TODO: fix brittle string comp
-			expect(decoded.requireSignedRequests).to.be.truthy;
-		});
-	});
-
-	describe("buildSPMetadata", function() {
-
-		const simpleSP = entityFixtures.simpleSP;
-		const spWithCredentials = entityFixtures.simpleSPWithCredentials;
-
-		it("should describe a simple SP as valid XML", function() {
-
-			const xml = metadata.buildSPMetadata(simpleSP);
-			const node = new xmldom.DOMParser().parseFromString(xml);
-			xml.should.not.be.null;
-			node.should.not.be.null;
-
-			xpath.select("//*[local-name(.)='SPSSODescriptor']", node)
-				.length.should.equal(1);
-			xpath.select("//*[local-name(.)='AssertionConsumerService']", node)
-				.length.should.equal(2);
-		});
-
-		it("should describe an SP with credentials appropreately", function() {
-
-			const xml = metadata.buildSPMetadata(spWithCredentials);
-			const node = new xmldom.DOMParser().parseFromString(xml);
-			xml.should.not.be.null;
-			node.should.not.be.null;
-
-			xpath.select("//*[local-name(.)='SPSSODescriptor']", node)
-				.length.should.equal(1);
-			xpath.select("//*[local-name(.)='AssertionConsumerService']", node)
-				.length.should.equal(2);
-			xpath.select("//*[local-name(.)='KeyDescriptor']", node)
-				.length.should.equal(spWithCredentials.credentials.length);
-		});
-
-	});
-
-	describe("buildSPMetadata and getSPFromMetadata", function() {
-
-		it("Should get an SP config matching the supplied SP as a result of ingesting metadata", function() {
-
-			const sp = entityFixtures.simpleSPWithCredentials;
-
-			const encoded = metadata.buildSPMetadata(sp);
-			const decoded = metadata.getSPFromMetadata(encoded);
-
-			decoded.should.not.be.null;
-			decoded.entityID.should.equal(sp.entityID);
-			decoded.endpoints.assert.post.should.equal(sp.endpoints.assert);
-			decoded.endpoints.assert.redirect.should.equal(sp.endpoints.assert);
-			decoded.credentials.should.not.be.null;
-			decoded.credentials[0].certificate.should.not.be.null;
-			decoded.credentials[0].certificate.should.equal(sp.credentials[0].certificate);  // TODO: fix brittle string comp
-			expect(decoded.requireSignedResponses).to.be.truthy;
-		});
-	});
+      decoded.should.not.be.null;
+      decoded.entityID.should.equal(sp.entityID);
+      decoded.endpoints.assert.post.should.equal(sp.endpoints.assert);
+      decoded.endpoints.assert.redirect.should.equal(sp.endpoints.assert);
+      decoded.credentials.should.not.be.null;
+      decoded.credentials[0].certificate.should.not.be.null;
+      decoded.credentials[0].certificate.should.equal(sp.credentials[0].certificate); // TODO: fix brittle string comp
+      expect(decoded.requireSignedResponses).to.be.ok;
+    });
+  });
 });

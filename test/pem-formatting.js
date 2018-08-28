@@ -1,42 +1,38 @@
-"use strict";
+import 'chai/register-should';
+import * as pemFormatting from '../lib/util/pem-formatting';
+import credentialFixtures from './fixtures/credentials';
 
-const should = require("chai").should(); // eslint-disable-line no-unused-vars
+describe('PEM formatting utilities', () => {
+  const headersRe = /-----BEGIN [0-9A-Z ]+-----[^-]*-----END [0-9A-Z ]+-----/g;
+  const certPem = credentialFixtures.idp1.certificate;
 
-describe("PEM formatting utilities", function() {
+  before('cert fixture should not be null', () => {
+    certPem.should.not.be.null;
+  });
 
-	const pemFormatting = require("../lib/util/pem-formatting");
-	const credentialFixtures = require("./fixtures/credentials");
+  describe('addPEMHeaders', () => {
+    it('should correctly apply PEM headers to a certificate', () => {
+      const strippedCertPem = pemFormatting.stripPEMHeaders(certPem);
+      headersRe.test(strippedCertPem).should.not.be.ok;
+      const reappliedCertPem = pemFormatting.addPEMHeaders('CERTIFICATE', strippedCertPem);
+      headersRe.test(reappliedCertPem).should.be.ok;
+    });
+    it('should not add PEM headers to certificates that already possess them', () => {
+      const reappliedCertPem = pemFormatting.addPEMHeaders('CERTIFICATE', certPem);
+      reappliedCertPem.should.equal(certPem);
+    });
+  });
 
-	const headersRe = /-----BEGIN [0-9A-Z ]+-----[^-]*-----END [0-9A-Z ]+-----/g;
-	const certPem = credentialFixtures.idp1.certificate;
-
-	before("cert fixture should not be null", function() {
-		certPem.should.not.be.null;
-	});
-
-	describe("addPEMHeaders", function() {
-		it("should correctly apply PEM headers to a certificate", function() {
-			const strippedCertPem = pemFormatting.stripPEMHeaders(certPem);
-			headersRe.test(strippedCertPem).should.be.falsey;
-			const reappliedCertPem = pemFormatting.addPEMHeaders("CERTIFICATE", strippedCertPem);
-			headersRe.test(reappliedCertPem).should.be.truthy;
-		});
-		it("should not add PEM headers to certificates that already possess them", function() {
-			const reappliedCertPem = pemFormatting.addPEMHeaders("CERTIFICATE", certPem);
-			reappliedCertPem.should.equal(certPem);
-		});
-	});
-
-	describe("stripPEMHeaders", function() {
-		let strippedCertPem;
-		it("should correctly strip PEM headers from a certificate", function() {
-			strippedCertPem = pemFormatting.stripPEMHeaders(certPem);
-			strippedCertPem.should.not.be.null;
-			headersRe.test(strippedCertPem).should.be.falsey;
-		});
-		it("should allow pre-stripped PEM certitificates to pass through", function() {
-			const doubleStripped = pemFormatting.stripPEMHeaders(strippedCertPem);
-			doubleStripped.should.equal(strippedCertPem);
-		});
-	});
+  describe('stripPEMHeaders', () => {
+    let strippedCertPem;
+    it('should correctly strip PEM headers from a certificate', () => {
+      strippedCertPem = pemFormatting.stripPEMHeaders(certPem);
+      strippedCertPem.should.not.be.null;
+      headersRe.test(strippedCertPem).should.not.be.ok;
+    });
+    it('should allow pre-stripped PEM certitificates to pass through', () => {
+      const doubleStripped = pemFormatting.stripPEMHeaders(strippedCertPem);
+      doubleStripped.should.equal(strippedCertPem);
+    });
+  });
 });
