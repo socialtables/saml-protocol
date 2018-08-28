@@ -177,6 +177,25 @@ describe('ServiceProvider', function () {
       descriptor.attributes.length.should.equal(3);
     });
 
+    it('consumes a valid POST response without Name ID', async function () {
+      const sp = new ServiceProvider(
+        {
+          ...entityFixtures.oneloginSP,
+          requireSignedResponses: false,
+        },
+        model,
+      );
+
+      const responsePayload = samlFixtures('onelogin/onelogin-saml-response-nonameid.xml');
+      const postResponse = await prepareAsPostRequest(responsePayload);
+      const descriptor = await sp.consumePostResponse(postResponse);
+      descriptor.should.not.be.null;
+      descriptor.idp.should.equal(entityFixtures.oneloginIDP);
+      expect(descriptor.nameID).to.be.undefined;
+      descriptor.attributes.should.not.be.null;
+      descriptor.attributes.length.should.equal(3);
+    });
+
     it('consumes a valid POST response with a signature in the Response element', async function () {
       const sp = new ServiceProvider(
         {
