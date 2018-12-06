@@ -69,6 +69,8 @@ These objects are similar, and have the following fields:
 - `endpoints` **[required]**: a map of endpoints describing the way your service consumes requests/responses
   - `login` **[required for IDPs]**: the SSO login endpoint URL. Can be a string or an object with keys `redirect` and `post` to allow use of separate redirect and post binding endpoints or restriction to either mechanism.
   - `assert` **[required for SPs]**: the SSO assertion consumer endpoint URL. Can be a string or an object with keys `redirect` and `post` to allow use of separate redirect and post binding endpoints or restriction to either mechanism.
+- `authContext`: optional - Sets auth context comparison. Options: `exact` or `minimum`. Defaults to `exact`
+- `disableRequestedAuthnContext`: optional (defaults `false`) - if truthy, do not request a specific authentication context. This is known to help when [authenticating against Active Directory (AD FS) servers](https://github.com/bergie/passport-saml/issues/226).
 - `nameIDFormats`: optional list of NameID formats that this entity supports.
 - `signAllRequests`: optional - set to true to force signing for outgoing authentication requests.
 - `signAllResponses`: optional - set to true to force signing for outgoing assertions.
