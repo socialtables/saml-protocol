@@ -1,6 +1,6 @@
 {
   "name": "@socialtables/saml-protocol",
-  "version": "0.3.4",
+  "version": "0.3.6",
   "description": "A SAML protocol implementation for SPs and IDPs without opinionated framework bindings",
   "author": "Social Tables (https://www.socialtables.com)",
   "main": "./dist/index.js",
@@ -21,30 +21,30 @@
     "build": "rm -rf dist/** && ./node_modules/.bin/babel lib --out-dir dist --ignore *.spec.js,testHelpers/*,examples/*",
     "lint": "npx eslint lib",
     "prepare": "npm run lint && npm test && npm run build",
-    "test": "mocha --compilers js:@babel/register --recursive \"test/**/*.js\"",
+    "test": "mocha --require @babel/register --recursive \"test/**/*.js\"",
     "test:watch": "npm test -- --watch"
   },
   "dependencies": {
-    "moment": "^2.20.1",
-    "node-forge": "0.7.6",
-    "xml-crypto": "0.10.1",
+    "moment": "^2.24.0",
+    "node-forge": "0.8.1",
+    "xml-crypto": "1.2.0",
     "xml-encryption": "0.11.2",
-    "xmlbuilder": "10.0.0",
+    "xmlbuilder": "11.0.0",
     "xmldom": "0.1.22",
     "xpath": "0.0.27",
     "xpath.js": "1.1.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
     "@babel/register": "^7.0.0",
-    "babel-eslint": "^9.0.0",
-    "chai": "^4.1.2",
-    "eslint": "^5.4.0",
+    "babel-eslint": "^10.0.1",
+    "chai": "^4.2.0",
+    "eslint": "^5.15.1",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "mocha": "^5.2.0"
+    "eslint-plugin-import": "^2.16.0",
+    "mocha": "^6.0.2"
   },
   "bugs": {
     "url": "https://github.com/socialtables/saml-protocol/issues"
