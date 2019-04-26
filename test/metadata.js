@@ -96,7 +96,7 @@ describe("Metadata creation and ingestion functions", function() {
 			xpath.select("//*[local-name(.)='AssertionConsumerService']", node)
 				.length.should.equal(2);
 			xpath.select("//*[local-name(.)='KeyDescriptor']", node)
-				.length.should.equal(spWithCredentials.credentials.length);
+				.length.should.equal(spWithCredentials.credentials.length * 2);
 		});
 
 	});
