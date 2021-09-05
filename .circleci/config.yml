@@ -10,7 +10,7 @@ jobs:
       - image: circleci/node:4
 
     working_directory: ~/repo
-
+    context: st-global
     steps:
       - checkout
 
