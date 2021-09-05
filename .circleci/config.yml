@@ -5,12 +5,13 @@
 version: 2
 jobs:
   build:
+    context: st-global
     docker:
       # specify the version you desire here
       - image: circleci/node:4
 
     working_directory: ~/repo
-    context: st-global
+
     steps:
       - checkout
 
