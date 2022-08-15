@@ -3,7 +3,7 @@
 const expect = require("chai").expect;
 const should = require("chai").should(); // eslint-disable-line no-unused-vars
 const xpath = require("xpath");
-const xmldom = require("xmldom");
+const xmldom = require("@xmldom/xmldom");
 
 const metadata = require("../lib/metadata");
 

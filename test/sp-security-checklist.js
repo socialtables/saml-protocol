@@ -5,7 +5,7 @@ const chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 const should = chai.should(); // eslint-disable-line no-unused-vars
 
-const xmldom = require("xmldom");
+const xmldom = require("@xmldom/xmldom");
 const xpath  = require("xpath");
 const entityFixtures = require("./fixtures/entities");
 const ModelStub      = require("./fixtures/model-stub");

@@ -6,7 +6,7 @@ const expect = chai.expect;
 chai.use(chaiAsPromised);
 chai.should();
 
-const xmldom = require("xmldom");
+const xmldom = require("@xmldom/xmldom");
 const xpath = require("xpath");
 const zlib = require("zlib");
 
