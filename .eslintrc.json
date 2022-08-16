@@ -45,10 +45,6 @@
         "eslint:recommended",
         "plugin:node/recommended"
     ],
-    "ecmaFeatures": {
-        "jsx": true,
-        "experimentalObjectRestSpread": true
-    },
     "plugins": [
         "json",
         "node",
