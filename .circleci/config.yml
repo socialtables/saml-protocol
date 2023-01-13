@@ -3,6 +3,30 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
+orbs:
+  sre: socialtables/sre-docker@5
+job-filters:
+  all-commits: &all-commits
+    branches:
+      only: /.*/
+    tags:
+      only:
+        - /^v.*/
+  version-tags-only: &version-tags-only
+    branches:
+      ignore: /.*/
+    tags:
+      only: /^v.*/
+  main-branch-only: &main-branch-only
+    branches:
+      only:
+        - main
+  pr-branches-only: &pr-branches-only
+    branches:
+      ignore:
+        - main
+    tags:
+      ignore: /.*/
 jobs:
   build:
     context: st-global
