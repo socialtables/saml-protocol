@@ -19,7 +19,9 @@
   },
   "scripts": {
     "test": "mocha test/",
-    "posttest": "eslint ."
+    "posttest": "eslint .",
+    "changeset": "changeset",
+    "release": "st-changeset release"
   },
   "dependencies": {
     "@xmldom/xmldom": "^0.7.0",
@@ -32,6 +34,8 @@
     "xpath.js": "1.0.6"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.0",
+    "@socialtables/changesets": "^1.2.2",
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
     "eslint": "^8.22.0",
