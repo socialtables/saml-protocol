@@ -24,7 +24,7 @@
     "release": "st-changeset release"
   },
   "dependencies": {
-    "@xmldom/xmldom": "^0.7.0",
+    "@xmldom/xmldom": "^0.8.0",
     "moment": "^2.17.1",
     "node-forge": "1.3.0",
     "xml-crypto": "^2.1.4",
