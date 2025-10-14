@@ -1,3 +1,7 @@
+---
+"@socialtables/saml-protocol": major
+---
+
 ## Upgraded Packages
 
 | Package          | From            | To               | Change               |
