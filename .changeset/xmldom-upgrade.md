@@ -11,6 +11,10 @@
 | `xml-encryption` | 2.0.0           | 3.1.0 (^3.1.0)     | 1 major version      |
 | `xpath`          | 0.0.23          | 0.0.34 (^0.0.34)   | Patch upgrade        |
 | `changesets`     | 2.26.0          | 2.29.27 (^2.29.27) | Patch upgrade        |
+| `node-forge`     | 1.3.0           | removed.           | replaced with native crypto        |
+
+## BREAKING CHANGES
+Requires Node 20
 
 ## Code Changes Made
 
