@@ -19,7 +19,7 @@ describe("Metadata creation and ingestion functions", function() {
 		it("should describe a simple IDP as valid XML", function() {
 
 			const xml = metadata.buildIDPMetadata(simpleIDP);
-			const node = new xmldom.DOMParser().parseFromString(xml);
+			const node = new xmldom.DOMParser().parseFromString(xml, "text/xml");
 			xml.should.not.be.null;
 			node.should.not.be.null;
 
@@ -32,7 +32,7 @@ describe("Metadata creation and ingestion functions", function() {
 		it("should describe an IDP with credentials appropreately", function() {
 
 			const xml = metadata.buildIDPMetadata(idpWithCredentials);
-			const node = new xmldom.DOMParser().parseFromString(xml);
+			const node = new xmldom.DOMParser().parseFromString(xml, "text/xml");
 			xml.should.not.be.null;
 			node.should.not.be.null;
 
@@ -74,7 +74,7 @@ describe("Metadata creation and ingestion functions", function() {
 		it("should describe a simple SP as valid XML", function() {
 
 			const xml = metadata.buildSPMetadata(simpleSP);
-			const node = new xmldom.DOMParser().parseFromString(xml);
+			const node = new xmldom.DOMParser().parseFromString(xml, "text/xml");
 			xml.should.not.be.null;
 			node.should.not.be.null;
 
@@ -87,7 +87,7 @@ describe("Metadata creation and ingestion functions", function() {
 		it("should describe an SP with credentials appropreately", function() {
 
 			const xml = metadata.buildSPMetadata(spWithCredentials);
-			const node = new xmldom.DOMParser().parseFromString(xml);
+			const node = new xmldom.DOMParser().parseFromString(xml, "text/xml");
 			xml.should.not.be.null;
 			node.should.not.be.null;
 
