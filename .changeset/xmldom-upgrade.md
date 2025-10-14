@@ -4,12 +4,13 @@
 
 ## Upgraded Packages
 
-| Package          | From            | To               | Change               |
-| ---------------- | --------------- | ---------------- | -------------------- |
-| `@xmldom/xmldom` | 0.7.13 (^0.7.0) | 0.8.10 (^0.8.10) | Minor upgrade        |
-| `xml-crypto`     | 2.1.6 (^2.1.6)  | 6.1.2 (^6.1.2)   | **4 major versions** |
-| `xml-encryption` | 2.0.0           | 3.1.0 (^3.1.0)   | 1 major version      |
-| `xpath`          | 0.0.23          | 0.0.34 (^0.0.34) | Patch upgrade        |
+| Package          | From            | To                 | Change               |
+| ---------------- | --------------- | ------------------ | -------------------- |
+| `@xmldom/xmldom` | 0.7.13 (^0.7.0) | 0.8.10 (^0.8.10)   | Minor upgrade        |
+| `xml-crypto`     | 2.1.6 (^2.1.6)  | 6.1.2 (^6.1.2)     | **4 major versions** |
+| `xml-encryption` | 2.0.0           | 3.1.0 (^3.1.0)     | 1 major version      |
+| `xpath`          | 0.0.23          | 0.0.34 (^0.0.34)   | Patch upgrade        |
+| `changesets`     | 2.26.0          | 2.29.27 (^2.29.27) | Patch upgrade        |
 
 ## Code Changes Made
 
