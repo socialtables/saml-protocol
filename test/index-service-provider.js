@@ -50,7 +50,7 @@ describe("ServiceProvider", function() {
 
 					const requestBase64 = descriptor.formBody.SAMLRequest;
 					const requestXML = new Buffer(requestBase64, "base64").toString("utf8");
-					const request = new xmldom.DOMParser().parseFromString(requestXML);
+					const request = new xmldom.DOMParser().parseFromString(requestXML, "text/xml");
 					xpath.select("//*[local-name(.)='AuthnRequest']", request).length.should.equal(1);
 					xpath.select("//*[local-name(.)='Signature']", request).length.should.equal(0);
 				});
@@ -74,7 +74,7 @@ describe("ServiceProvider", function() {
 
 					const requestBase64 = descriptor.formBody.SAMLRequest;
 					const requestXML = new Buffer(requestBase64, "base64").toString("utf8");
-					const request = new xmldom.DOMParser().parseFromString(requestXML);
+					const request = new xmldom.DOMParser().parseFromString(requestXML, "text/xml");
 					xpath.select("//*[local-name(.)='AuthnRequest']", request).length.should.equal(1);
 					xpath.select("//*[local-name(.)='Signature']", request).length.should.equal(1);
 					const sigNode = xpath.select("//*[local-name(.)='Signature']", request)[0];
@@ -99,7 +99,7 @@ describe("ServiceProvider", function() {
 					expect(descriptor.url.query.Signature).to.be.undefined;
 					const requestBase64 = descriptor.url.query.SAMLRequest;
 					const requestXML = zlib.inflateRawSync(new Buffer(requestBase64, "base64")).toString("utf8");
-					const request = new xmldom.DOMParser().parseFromString(requestXML);
+					const request = new xmldom.DOMParser().parseFromString(requestXML, "text/xml");
 					xpath.select("//*[local-name(.)='AuthnRequest']", request).length.should.equal(1);
 				});
 		});
@@ -121,7 +121,7 @@ describe("ServiceProvider", function() {
 					descriptor.url.query.Signature.should.be.defined;
 					const requestBase64 = descriptor.url.query.SAMLRequest;
 					const requestXML = zlib.inflateRawSync(new Buffer(requestBase64, "base64")).toString("utf8");
-					const request = new xmldom.DOMParser().parseFromString(requestXML);
+					const request = new xmldom.DOMParser().parseFromString(requestXML, "text/xml");
 					xpath.select("//*[local-name(.)='AuthnRequest']", request).length.should.equal(1);
 
 					signing.verifyURLSignature(
@@ -170,7 +170,7 @@ describe("ServiceProvider", function() {
 		}
 
 		function encryptAssertion(xml) {
-			const doc = new xmldom.DOMParser().parseFromString(xml);
+			const doc = new xmldom.DOMParser().parseFromString(xml, "text/xml");
 			const cred = entityFixtures.oneloginSP.credentials[0];
 			return encryption
 				.encryptAssertion(doc, cred)
@@ -360,7 +360,7 @@ describe("ServiceProvider", function() {
 			return Promise.resolve(responsePayload)
 				.then(signResponse)
 				.then(xml => {
-					const doc = new xmldom.DOMParser().parseFromString(xml);
+					const doc = new xmldom.DOMParser().parseFromString(xml, "text/xml");
 					xpath.select("//*[local-name(.)='AttributeValue']", doc)[0].textContent = "changed";
 					return new xmldom.XMLSerializer().serializeToString(doc);
 				})
@@ -443,7 +443,7 @@ describe("ServiceProvider", function() {
 		}
 
 		function encryptAssertion(xml) {
-			const doc = new xmldom.DOMParser().parseFromString(xml);
+			const doc = new xmldom.DOMParser().parseFromString(xml, "text/xml");
 			const cred = entityFixtures.oneloginSP.credentials[0];
 			return encryption
 				.encryptAssertion(doc, cred)

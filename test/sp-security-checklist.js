@@ -55,7 +55,7 @@ describe("Service Provider security checklist", function() {
 		}
 
 		function parse(xml) {
-			return new xmldom.DOMParser().parseFromString(xml);
+			return new xmldom.DOMParser().parseFromString(xml, "text/xml");
 		}
 		
 		function consume(doc, skipSigning) {
@@ -122,7 +122,7 @@ describe("Service Provider security checklist", function() {
 			const dest = idp.endpoints.login;
 			return requestConstruction.createAuthnRequest(sp, idp, model, dest)
 				.then(xml => {
-					const doc = new xmldom.DOMParser().parseFromString(xml);
+					const doc = new xmldom.DOMParser().parseFromString(xml, "text/xml");
 					doc.childNodes.length.should.equal(1);
 					authnRequest = doc.childNodes[0];
 					authnRequest.localName.should.equal("AuthnRequest");
@@ -174,7 +174,7 @@ describe("Service Provider security checklist", function() {
 		}
 
 		function parse(xml) {
-			return new xmldom.DOMParser().parseFromString(xml);
+			return new xmldom.DOMParser().parseFromString(xml, "text/xml");
 		}
 
 		function consume(doc, skipSigning) {
@@ -532,7 +532,7 @@ describe("Service Provider security checklist", function() {
 					.then(parse)
 					.then(doc => {
 						const authnStatement = select("//saml:AuthnStatement", doc)[0];
-						doc.removeChild(authnStatement);
+						authnStatement.parentNode.removeChild(authnStatement);
 						return doc;
 					})
 					.then(consume).should.eventually.be.rejected

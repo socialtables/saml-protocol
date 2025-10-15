@@ -33,7 +33,7 @@ describe("Signing utilities", function() {
 
 				signedXML.should.not.be.null;
 
-				const doc = new xmldom.DOMParser().parseFromString(signedXML);
+				const doc = new xmldom.DOMParser().parseFromString(signedXML, "text/xml");
 				const sigNode = select("//ds:Signature", doc)[0];
 				sigNode.should.not.be.null;
 				select("//ds:SignatureMethod", sigNode)[0]
@@ -59,7 +59,7 @@ describe("Signing utilities", function() {
 						signatureAlgorithm: alg
 					}
 				);
-				const doc = new xmldom.DOMParser().parseFromString(signedXML);
+				const doc = new xmldom.DOMParser().parseFromString(signedXML, "text/xml");
 				const sigNode = select("//ds:Signature", doc)[0];
 				sigNode.should.not.be.null;
 

@@ -92,7 +92,7 @@ describe("Protocol binding functions", function() {
 
 			recieved.should.not.be.null;
 			recieved.payload.should.not.equal(payload);
-			const recievedDOM = new xmldom.DOMParser().parseFromString(recieved.payload);
+			const recievedDOM = new xmldom.DOMParser().parseFromString(recieved.payload, "text/xml");
 			xpath.select("//*[local-name(.)='Signature']", recievedDOM)[0].should.not.be.null;
 		});
 	});
